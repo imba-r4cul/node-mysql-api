@@ -4,20 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-  "start": "ts-node ./server.ts",
-  "start:dev": "nodemon --exec ts-node ./server.ts"
+    "start": "ts-node ./server.ts",
+    "start:dev": "nodemon --exec ts-node ./server.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "body-parser": "^2.2.2",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "express": "^5.2.1",
-    "express-jwt": "^8.5.1",
+    "express-jwt": "^6.1.2",
     "joi": "^18.1.2",
     "jsonwebtoken": "^9.0.3",
     "mysql2": "^3.22.0",
