@@ -12,8 +12,8 @@
     "host": "smtp.ethereal.email",
     "port": 587,
     "auth": {
-      "user": "your_ethereal_user",
-      "pass": "your_ethereal_pass"
+      "user": "yesenia.jenkins@ethereal.email",
+      "pass": "TS13BCsdFKYZngJKKd"
     }
   }
 }
