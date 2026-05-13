@@ -12,18 +12,29 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-// allow cors requests from any origin and with credentials
-app.use(cors({ origin: (origin, callback) => callback(null, true), credentials: true }));
+// CORS configuration: permissive in dev, locked to CORS_ORIGIN in prod
+const corsOrigin = process.env.CORS_ORIGIN;
+app.use(cors({
+    origin: process.env.NODE_ENV === 'production'
+        ? (corsOrigin ? corsOrigin.split(',').map(x => x.trim()) : false)
+        : (origin, callback) => callback(null, true),
+    credentials: true
+}));
 
-// api routes
+// API routes
 app.use('/accounts', accountsController);
 
-// swagger docs route
+// Swagger docs route
 app.use('/api-docs', swaggerDocs);
 
-// global error handler
+// Global error handler
 app.use(errorHandler);
 
-// start server
-const port = process.env.NODE_ENV === 'production' ? (process.env.PORT || 80) : 4000;
-app.listen(port, () => console.log('Server listening on port ' + port));
+// Export app for Vercel
+export default app;
+
+// Start server if not running on Vercel
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+    const port = process.env.NODE_ENV === 'production' ? (process.env.PORT || 80) : 4000;
+    app.listen(port, () => console.log('Server listening on port ' + port));
+}

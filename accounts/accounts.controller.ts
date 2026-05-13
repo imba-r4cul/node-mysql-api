@@ -43,6 +43,7 @@ function authenticate(req: any, res: any, next: any) {
 
 function refreshToken(req: any, res: any, next: any) {
   const token = req.cookies.refreshToken;
+  if (!token) return res.status(400).json({ message: 'Token is required' });
   const ipAddress = req.ip;
   accountService.refreshToken({ token, ipAddress })
     .then(({ refreshToken, ...account }: any) => {
@@ -61,6 +62,7 @@ function revokeTokenSchema(req: any, res: any, next: any) {
 
 function revokeToken(req: any, res: any, next: any) {
   const token = req.body.token || req.cookies.refreshToken;
+  if (!token) return res.status(400).json({ message: 'Token is required' });
   const ipAddress = req.ip;
 
   if (!token) return res.status(400).json({ message: 'Token is required' });
@@ -221,9 +223,11 @@ function _delete(req: any, res: any, next: any) {
 }
 
 function setTokenCookie(res: any, token: any) {
-  const cookieOptions = {
-    httpOnly: true,
-    expires: new Date(Date.now() + 7*24*60*60*1000)
-  };
-  res.cookie('refreshToken', token, cookieOptions);
+    const cookieOptions = {
+        httpOnly: true,
+        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        secure: process.env.COOKIE_SECURE === 'true',
+        sameSite: (process.env.COOKIE_SAMESITE as any) || 'lax'
+    };
+    res.cookie('refreshToken', token, cookieOptions);
 }
